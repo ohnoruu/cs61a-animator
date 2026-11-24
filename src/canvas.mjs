@@ -18,6 +18,8 @@ let rate = 1; // a multiple of normal speed; negative plays the drawing backward
 let clock = 0; // the drawing's time, in tenths of a second, in [0, endClock]
 let lastTs = 0;
 let running = false;
+let finished = false; // whether the clock has reached the drawing's endClock
+let onFinishedChange = null;
 let framesWithoutCanvas = 0;
 
 const TENTHS_PER_SECOND = 10;
@@ -73,6 +75,20 @@ export function setSpeed(r) {
 // Jump the animation back to the start (empty canvas).
 export function resetClock() {
   clock = 0;
+  setFinished(false);
+}
+
+// Register `callback(finished)`, called whenever the animation becomes finished
+// (time has reached the end of the last path) or stops being finished (the clock
+// was reset, or the drawing changed to a longer one).
+export function setOnFinishedChange(callback) {
+  onFinishedChange = callback;
+}
+
+function setFinished(value) {
+  if (value === finished) return;
+  finished = value;
+  if (onFinishedChange) onFinishedChange(value);
 }
 
 function frame(ts) {
@@ -86,6 +102,8 @@ function frame(ts) {
   // a finished drawing.
   clock += dt * rate * TENTHS_PER_SECOND;
   clock = clamp(clock, 0, drawing.endClock);
+  // An empty drawing has endClock = Infinity, so it never finishes.
+  setFinished(clock >= drawing.endClock);
   render();
   requestAnimationFrame(frame);
 }

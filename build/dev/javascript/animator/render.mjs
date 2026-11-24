@@ -5,6 +5,7 @@ import {
   setDrawing as set_drawing,
   setSpeed as set_speed,
   resetClock as reset_clock,
+  setOnFinishedChange as on_finished_change,
 } from "./canvas.mjs";
 import {
   List$Empty$const as $List$Empty$const,
@@ -15,7 +16,7 @@ import {
 import * as $shape from "./shape.mjs";
 import { Line, Point, Quad } from "./shape.mjs";
 
-export { reset_clock, set_drawing, set_speed };
+export { on_finished_change, reset_clock, set_drawing, set_speed };
 
 export class RenderPath extends $CustomType {
   constructor(points, thickness, color, start, end) {

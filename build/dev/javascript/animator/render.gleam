@@ -39,6 +39,12 @@ pub fn set_speed(rate: Float) -> Nil
 @external(javascript, "./canvas.mjs", "resetClock")
 pub fn reset_clock() -> Nil
 
+/// Register a callback that the canvas calls with True when the animation
+/// finishes (time reaches the end of the last path) and with False when it stops
+/// being finished (after reset_clock, or when the drawing becomes longer).
+@external(javascript, "./canvas.mjs", "setOnFinishedChange")
+pub fn on_finished_change(callback: fn(Bool) -> Nil) -> Nil
+
 /// How many segments to use when flattening a Quad into a polyline.
 const quad_segments = 24
 
